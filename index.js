@@ -50,6 +50,17 @@ async function run() {
         const ordersCollection = database.collection("orders");
         const productsCollection = database.collection("products");
 
+        app.get('/products', async (req, res) => {
+            let query = {};
+            const category = req.query.category;
+            if (category) {
+                query = { category: category };
+            }
+            const cursor = await allPostCollection.find(query);
+            const posts = await cursor.toArray();
+            res.send(posts);
+        })
+
         app.get('/orders', verifyToken, async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
