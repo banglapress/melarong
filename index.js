@@ -49,6 +49,7 @@ async function run() {
         const usersCollection = database.collection('users');
         const ordersCollection = database.collection("orders");
         const productsCollection = database.collection("products");
+        const allproductsCollection = database.collection("allproducts");
 
         app.get('/products', async (req, res) => {
             let query = {};
@@ -56,7 +57,18 @@ async function run() {
             if (category) {
                 query = { category: category };
             }
-            const cursor = await allPostCollection.find(query);
+            const cursor = await productsCollection.find(query);
+            const posts = await cursor.toArray();
+            res.send(posts);
+        })
+
+        app.get('/allproducts', async (req, res) => {
+            let query = {};
+            const category = req.query.category;
+            if (category) {
+                query = { category: category };
+            }
+            const cursor = await allproductsCollection.find(query);
             const posts = await cursor.toArray();
             res.send(posts);
         })
