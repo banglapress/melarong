@@ -62,7 +62,6 @@ async function run() {
             res.send(posts);
         })
 
-
         app.post('/allproducts', async (req, res) => {
             const richText = req.body.richText;
             const productName = req.body.productName;
