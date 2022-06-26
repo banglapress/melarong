@@ -62,13 +62,36 @@ async function run() {
             res.send(posts);
         })
 
+
         app.post('/allproducts', async (req, res) => {
-            const product = req.body;
-            console.log('hit the post api', product);
-            const result = await allproductsCollection.insertOne(product);
-            console.log(result);
-            res.json(result)
-        });
+            const richText = req.body.richText;
+            const productName = req.body.productName;
+            const excerpt = req.body.excerpt;
+            const category = req.body.category;
+            const bannerHead = req.body.bannerHead;
+            const stock = req.body.stock;
+            const shipping = req.body.shipping;
+            const price = req.body.price;
+            const regularPrice = req.body.regularPrice;
+            const rating = req.body.rating;
+            const image = req.body.image;
+
+            const post = {
+                richText,
+                productName,
+                excerpt,
+                category,
+                bannerHead,
+                stock,
+                shipping,
+                price,
+                regularPrice,
+                rating,
+                image
+            }
+            const result = await allproducts.insertOne(post);
+            res.json(result);
+        })
 
         app.get('/allproducts', async (req, res) => {
             let query = {};
