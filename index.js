@@ -62,6 +62,14 @@ async function run() {
             res.send(posts);
         })
 
+        app.post('/allproducts', async (req, res) => {
+            const product = req.body;
+            console.log('hit the post api', product);
+            const result = await allproductsCollection.insertOne(product);
+            console.log(result);
+            res.json(result)
+        });
+
         app.get('/allproducts', async (req, res) => {
             let query = {};
             const category = req.query.category;
