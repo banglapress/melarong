@@ -88,7 +88,7 @@ async function run() {
                 rating,
                 image
             }
-            const result = await allproducts.insertOne(post);
+            const result = await allproductsCollection.insertOne(post);
             res.json(result);
         })
 
