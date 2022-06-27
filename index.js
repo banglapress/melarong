@@ -66,24 +66,36 @@ async function run() {
 
         app.post('/allproducts', async (req, res) => {
             const richText = req.body.richText;
-            const headline = req.body.headline;
+            const productName = req.body.productName;
             const excerpt = req.body.excerpt;
             const category = req.body.category;
+            const bannerHead = req.body.bannerHead;
+            const stock = req.body.stock;
+            const shipping = req.body.shipping;
+            const price = req.body.price;
+            const regularPrice = req.body.regularPrice;
+            const rating = req.body.rating;
             const pic = req.files.image;
             const picData = pic.data;
             const encodedPic = picData.toString('base64');
             const imageBuffer = Buffer.from(encodedPic, 'base64')
+
             const post = {
                 richText,
-                headline,
+                productName,
                 excerpt,
                 category,
+                bannerHead,
+                stock,
+                shipping,
+                price,
+                regularPrice,
+                rating,
                 image: imageBuffer
             }
             const result = await allproductsCollection.insertOne(post);
             res.json(result);
         })
-
 
         app.get('/allproducts', async (req, res) => {
             let query = {};
