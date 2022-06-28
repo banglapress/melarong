@@ -118,7 +118,7 @@ async function run() {
             const requester = req.decodedEmail;
             if (requester) {
                 const requesterAccount = await usersCollection.findOne({ email: requester });
-                if (requesterAccount.role === "admin") {
+                if (requesterAccount.role === admin) {
                     const cursor = ordersCollection.find({});
                     const orders = await cursor.toArray();
                     res.json(orders);
