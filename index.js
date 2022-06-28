@@ -108,18 +108,17 @@ async function run() {
             res.send(posts);
         })
 
-        app.get('/orders', async (req, res) => {
-            const cursor = ordersCollection.find({});
-            const result = await cursor.toArray();
-            res.json(result);
-        })
+        // app.get('/orders', async (req, res) => {
+        //     const cursor = ordersCollection.find({});
+        //     const result = await cursor.toArray();
+        //     res.json(result);
+        // })
 
         app.get('/orders', verifyToken, async (req, res) => {
             const requester = req.decodedEmail;
             if (requester) {
                 const requesterAccount = await usersCollection.findOne({ email: requester });
                 if (requesterAccount.role === 'admin') {
-
                     const cursor = ordersCollection.find({});
                     const orders = await cursor.toArray();
                     res.json(orders);
@@ -130,8 +129,6 @@ async function run() {
             }
 
         })
-
-
 
         app.get('/orders', verifyToken, async (req, res) => {
             const email = req.query.email;
@@ -148,6 +145,7 @@ async function run() {
         // })
 
         //--ok
+
         app.put('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
