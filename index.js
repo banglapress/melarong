@@ -115,7 +115,7 @@ async function run() {
         // })
 
         app.get('/orders', verifyToken, async (req, res) => {
-            const requester = req.query.decodedEmail;
+            const requester = req.decodedEmail;
             if (requester) {
                 const requesterAccount = await usersCollection.findOne({ email: requester });
                 if (requesterAccount.role === "admin") {
