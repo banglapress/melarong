@@ -108,6 +108,24 @@ async function run() {
             res.send(posts);
         })
 
+
+        app.get('/orders', verifyToken, async (req, res) => {
+            const user = req.body;
+            const requester = req.decodedEmail;
+            if (requester) {
+                const requesterAccount = await usersCollection.findOne({ email: requester });
+                if (requesterAccount.role === 'admin') {
+                    const cursor = ordersCollection.find({});
+                    const orders = await cursor.toArray();
+                    res.json(orders);
+                }
+            }
+            else {
+                res.status(403).json({ message: 'you do not have access to Check Orders!' })
+            }
+
+        })
+
         app.get('/orders', verifyToken, async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
@@ -116,11 +134,12 @@ async function run() {
             res.json(orders);
         })
 
-        app.get('/orders', async (req, res) => {
-            const cursor = ordersCollection.find({});
-            const orders = await cursor.toArray();
-            res.json(orders);
-        })
+        // app.get('/orders', async (req, res) => {
+        //     const cursor = ordersCollection.find({});
+        //     const orders = await cursor.toArray();
+        //     res.json(orders);
+        // })
+
         //--ok
         app.put('/orders/:id', async (req, res) => {
             const id = req.params.id;
@@ -142,6 +161,7 @@ async function run() {
             }
             res.json({ admin: isAdmin });
         })
+
         //--ok
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -158,6 +178,7 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.json(result);
         });
+
         //--ok
         app.put('/users/admin', verifyToken, async (req, res) => {
             const user = req.body;
