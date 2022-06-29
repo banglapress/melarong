@@ -136,11 +136,11 @@ async function run() {
         })
 
 
-        app.get('/orders', async (req, res) => {
-            const cursor = ordersCollection.find({});
-            const orders = await cursor.toArray();
-            res.json(orders);
-        })
+        // app.get('/orders', async (req, res) => {
+        //     const cursor = ordersCollection.find({});
+        //     const orders = await cursor.toArray();
+        //     res.json(orders);
+        // })
 
         //--ok
 
