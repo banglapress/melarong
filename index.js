@@ -108,19 +108,23 @@ async function run() {
             res.send(posts);
         })
 
-        app.get('/orders', verifyToken, async (req, res, next) => {
-            const email = req.body;
-            const query = { email: email };
-            const user = await usersCollection.findOne(query);
-            if (user?.role === 'admin') {
-                const cursor = ordersCollection.find({});
-                const orders = await cursor.toArray();
-                res.json(orders);
+        app.get('/orders', verifyToken, async (req, res) => {
+            const user = req.body;
+            const requester = req.decodedEmail;
+            if (requester) {
+                const requesterAccount = await usersCollection.findOne({ email: requester });
+                if (requesterAccount.role === 'admin') {
+                    const filter = { email: user.email };
+                    const cursor = ordersCollection.find({});
+                    const orders = await cursor.toArray();
+                    res.json(orders);
+                }
             }
             else {
                 res.status(403).json({ message: 'you do not have access to Check Orders!' })
             }
         })
+
 
 
         app.get('/orders', verifyToken, async (req, res) => {
