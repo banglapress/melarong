@@ -109,31 +109,30 @@ async function run() {
         })
 
         app.get('/orders', verifyToken, async (req, res) => {
-            const user = req.body;
-            const requester = req.decodedEmail;
-            if (requester) {
-                const requesterAccount = await usersCollection.findOne({ email: requester });
-                if (requesterAccount.role === 'admin') {
-                    const filter = { email: user.email };
-                    const cursor = ordersCollection.find({});
-                    const orders = await cursor.toArray();
-                    res.json(orders);
-                }
-            }
-            else {
-                res.status(403).json({ message: 'you do not have access to Check Orders!' })
-            }
-        })
-
-
-
-        app.get('/orders', verifyToken, async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
             const cursor = ordersCollection.find(query);
             const orders = await cursor.toArray();
             res.json(orders);
         })
+
+
+        app.get('/orders', verifyToken, async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const cursor = usersCollection.findOne(query);
+            if (cursor.role === 'admin') {
+                const filter = { email: user.email };
+                const updateDoc = { $set: { role: 'admin' } };
+                const result = await usersCollection.updateOne(filter, updateDoc);
+                res.json(result);
+            }
+            else {
+                res.status(403).json({ message: 'you do not have access to make admin' })
+            }
+
+        })
+
 
 
         // app.get('/orders', async (req, res) => {
