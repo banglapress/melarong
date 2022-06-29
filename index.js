@@ -108,8 +108,8 @@ async function run() {
             res.send(posts);
         })
 
-        app.get('/orders', verifyToken, async (req, res) => {
-            const email = req.params.email;
+        app.get('/orders', verifyToken, async (req, res, next) => {
+            const email = req.body;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
             if (user?.role === 'admin') {
