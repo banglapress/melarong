@@ -109,14 +109,17 @@ async function run() {
         })
 
         app.get('/orders', verifyToken, async (req, res) => {
-            const requester = req.decodedEmail;
-            if (requester) {
-                const requesterAccount = await usersCollection.findOne({ email: requester });
-                if (requesterAccount.role === "admin") {
-                    const cursor = ordersCollection.find({});
-                    const orders = await cursor.toArray();
-                    res.json(orders);
-                }
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            let isAdmin = false;
+            if (user?.role === 'admin') {
+                isAdmin = true;
+            }
+            if (isAdmin = true) {
+                const cursor = ordersCollection.find({});
+                const orders = await cursor.toArray();
+                res.json(orders);
             }
             else {
                 res.status(403).json({ message: 'you do not have access to Check Orders!' })
