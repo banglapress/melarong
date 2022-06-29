@@ -108,6 +108,13 @@ async function run() {
             res.send(posts);
         })
 
+
+        app.get('/orders', async (req, res) => {
+            const cursor = ordersCollection.find({});
+            const orders = await cursor.toArray();
+            res.json(orders);
+        })
+
         app.get('/orders', verifyToken, async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
@@ -117,11 +124,6 @@ async function run() {
         })
 
 
-        app.get('/orders', async (req, res) => {
-            const cursor = ordersCollection.find({});
-            const orders = await cursor.toArray();
-            res.json(orders);
-        })
 
         //--ok
 
