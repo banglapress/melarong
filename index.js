@@ -112,11 +112,7 @@ async function run() {
             const email = req.params.email;
             const query = { email: email };
             const user = await usersCollection.findOne(query);
-            let isAdmin = false;
             if (user?.role === 'admin') {
-                isAdmin = true;
-            }
-            if (isAdmin = true) {
                 const cursor = ordersCollection.find({});
                 const orders = await cursor.toArray();
                 res.json(orders);
